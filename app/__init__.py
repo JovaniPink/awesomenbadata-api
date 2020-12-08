@@ -8,9 +8,6 @@ import connexion
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_migrate import Migrate, MigrateCommand
-from flask_user import UserManager, UserMixin
-from flask_mail import Mail
-from flask_wtf.csrf import CSRFProtect
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -18,8 +15,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 ma = Marshmallow()
 db = SQLAlchemy()
 migrate = Migrate()
-mail = Mail()
-csrf_protect = CSRFProtect()
 
 # https://flask.palletsprojects.com/en/0.12.x/patterns/appfactories/
 def create_app(extra_config_settings={}):
@@ -52,79 +47,16 @@ def create_app(extra_config_settings={}):
     # Setup Flask-Migrate
     migrate.init_app(app, db)
 
-    # Setup Flask-Mail
-    mail.init_app(app)
-
-    # Setup WTForms CSRFProtect
-    csrf_protect.init_app(app)
-
     # Register blueprints
     from app.views.landing import main_blueprint
     from app.views.apis import api_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(api_blueprint)
-    csrf_protect.exempt(api_blueprint)
 
     # Register blueprints
     from app.views.landing import main_blueprint
 
     app.register_blueprint(main_blueprint)
 
-    # Define bootstrap_is_hidden_field for flask-bootstrap's bootstrap_wtf.html
-    from wtforms.fields import HiddenField
-
-    def is_hidden_field_filter(field):
-        return isinstance(field, HiddenField)
-
-    app.jinja_env.globals["bootstrap_is_hidden_field"] = is_hidden_field_filter
-
-    # Setup an error-logger to send emails to app.config.ADMINS
-    init_email_error_handler(app)
-
-    # Setup Flask-User to handle user account related forms
-    from .models.user_models import User, MyRegisterForm
-    from .views.landing import user_profile_page
-
-    user_manager = UserManager(app, db, User)
-
     return app
-
-
-def init_email_error_handler(app):
-    """
-    Initialize a logger to send emails on error-level messages.
-    Unhandled exceptions will now send an email message to app.config.ADMINS.
-    """
-    if app.debug:
-        return  # Do not send error emails while developing
-
-    # Retrieve email settings from app.config
-    host = app.config["MAIL_SERVER"]
-    port = app.config["MAIL_PORT"]
-    from_addr = app.config["MAIL_DEFAULT_SENDER"]
-    username = app.config["MAIL_USERNAME"]
-    password = app.config["MAIL_PASSWORD"]
-    secure = () if app.config.get("MAIL_USE_TLS") else None
-
-    # Retrieve app settings from app.config
-    to_addr_list = app.config["ADMINS"]
-    subject = app.config.get("APP_SYSTEM_ERROR_SUBJECT_LINE", "System Error")
-
-    # Setup an SMTP mail handler for error-level messages
-    import logging
-    from logging.handlers import SMTPHandler
-
-    mail_handler = SMTPHandler(
-        mailhost=(host, port),  # Mail host and port
-        fromaddr=from_addr,  # From address
-        toaddrs=to_addr_list,  # To address
-        subject=subject,  # Subject line
-        credentials=(username, password),  # Credentials
-        secure=secure,
-    )
-    mail_handler.setLevel(logging.ERROR)
-    app.logger.addHandler(mail_handler)
-
-    # Log errors using: app.logger.error('Some error message')
-

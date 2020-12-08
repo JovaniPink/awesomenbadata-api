@@ -31,6 +31,9 @@ flask_wtf
 flask_sqlalchemy
 Flask-BabelEx
 Flask-User
+Flask-Session
+email_validator
+Flask-WTF==0.14.3
 gunicorn
 psycopg2
 # Automated tests

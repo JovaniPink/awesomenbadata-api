@@ -34,7 +34,7 @@ This project integrates other Flask libraries using:
         * templates
         * views
     * tests
-* Includes test framework (`py.test` and `tox`)
+* Includes test framework (`py.test`)
 * Includes database migration framework (`alembic`)
 * Sends error emails to admins for unhandled exceptions
 
@@ -51,6 +51,15 @@ pip install -r requirements.txt
 
     # Create DB tables and populate the roles and users tables
     python manage.py init_db
+
+### Configuring SMTP
+
+Edit the `local_settings.py` file.
+
+Specifically set all the MAIL_... settings to match your SMTP settings
+
+Note that Google's SMTP server requires the configuration of "less secure apps".
+See https://support.google.com/accounts/answer/6010255?hl=en
 
 ### 3. Set the FLASK_APP environment variable
 ```powershell
@@ -73,6 +82,25 @@ To run the application in production mode, gunicorn3 is used (and included in re
     # Start the Flask development web server
     py.test tests/
 
+#### Using Server-side Sessions
+
+Don't use server side session data! You should do everything you can to keep each request/response stateless. It'll be easier to maintain your code and easier to debug when something goes wrong.  
+
+However, if you really need sessions, FlaskDash has Flask-Session built in (https://pythonhosted.org/Flask-Session/).  It is configured to use to the SQLAlchmey interface by default and the init_db command will set up a sessions table in your database.  You can change your configuration to use redis or MongoDB, as well.
+
+Sessions are available in misc_views.py and can be added to any additional controllers you create.
+
+This is how you might use it:
+
+    # Session example
+    session['key'] = 'value'
+    val = session.get('key', 'not set')
+    print(val)
+    value    
+    val = session.get('key2', 'not set')
+    print(val)
+    not set
+
 ### Trouble shooting
 
 If you make changes in the Models and run into DB schema issues, delete the sqlite DB file `app.sqlite`.
@@ -92,6 +120,7 @@ A helpful checklist to gauge how your README is coming on what I would like to f
 
 - [ ] Need to add Celery
 - [ ] Add the mail blueprint
+- [ ] https://github.com/cburmeister/flask-bones
 
 ## Contributing
 
