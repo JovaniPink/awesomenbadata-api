@@ -18,7 +18,7 @@ migrate = Migrate()
 
 # https://flask.palletsprojects.com/en/0.12.x/patterns/appfactories/
 def create_app(extra_config_settings={}):
-    """Create a Flask applicaction.
+    """Create a Flask application.
     """
     # Create the connexion application instance
     app = connexion.FlaskApp(__name__, specification_dir=basedir)
@@ -36,7 +36,7 @@ def create_app(extra_config_settings={}):
 
     # Setup Flask-Extensions -- do this _after_ app config has been loaded
     # We are doing this because our web application could have different
-    # config files depending the server enivornment and context.
+    # config files depending the server environment and context.
 
     # Setup Marshmallow
     ma.init_app(app)

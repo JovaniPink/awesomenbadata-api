@@ -1,4 +1,4 @@
-# nba-api
+# NBA API
 
 > OpenAPI Flask app that serves data to measuredstudios.com on NBA data.
 
@@ -20,25 +20,27 @@ Its not just Flask but an ecosystem to properly create a RESTful API service:
 
 ### Code characteristics
 
-* Tested on Python 2.6, 2.7, 3.3, 3.4, 3.5 and 3.6
-* Well organized directories with lots of comments
-    * app
-        * commands
-        * models
-        * static
-        * templates
-        * views
-    * tests
-* Includes test framework (`py.test`)
-* Includes database migration framework (`alembic`)
+- Tested on Python 2.6, 2.7, 3.3, 3.4, 3.5 and 3.6
+- Well organized directories with lots of comments
+  - app
+    - commands
+    - models
+    - static
+    - templates
+    - views
+  - tests
+- Includes test framework (`py.test`)
+- Includes database migration framework (`alembic`)
 
 ## Installation
 
 ### 1. Get the code
-    git clone 
+
+    git clone
     cd nba-api
 
-### 2. Install requirements 
+### 2. Install requirements
+
     pip install -r requirements.txt
 
 ### Initializing the Database
@@ -47,12 +49,6 @@ Its not just Flask but an ecosystem to properly create a RESTful API service:
     python manage.py init_db
 
 ### 3. Set the FLASK_APP environment variable
-
-```powershell
-PS ~/nba-api/> $env:FLASK_APP = 'app'
-PS ~/nba-api/> $env:FLASK_ENV = 'development'
-PS ~/nba-api/> python app.py
-```
 
 ### 4. Run the application
 
@@ -70,10 +66,23 @@ To run the application in production mode, gunicorn3 is used (and included in re
 
 ## Example
 
-/api/v1.0/precipitation
-/api/v1.0/stations
-/api/v1.0/tobs
-/api/v1.0/temp/2017-06-01/2017-06-30
+### Data Routes
+
+.route('/') # index html file
+.route('/api/players')
+.route('/api/player/<player_id>')
+.route('/api/player/<player_id>/season/<season_id>')
+.route('/api/teams')
+.route('/api/team/<team_id>')
+.route('/api/team/<team_id>/season/<season_id>')
+.route('/api/seasons')
+.route('/api/season/<season_id>')
+.route('/api/game/<date_string>')
+Application Errors https://flask.palletsprojects.com/en/1.1.x/errorhandling/
+
+### Model Routes
+
+.route('/api/predict/', methods=['POST']) # Takes in JSON, still figuring out.
 
 ## Data Powering the Web app
 
@@ -81,8 +90,8 @@ To run the application in production mode, gunicorn3 is used (and included in re
 
 A helpful checklist to gauge how your README is coming on what I would like to finish:
 
+- [ ] Lots of items! :)
 - [ ] Need to add Celery
-- [ ] https://github.com/cburmeister/flask-bones
 
 ## Contributing
 

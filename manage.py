@@ -9,12 +9,12 @@ from os import environ
 from flask_migrate import MigrateCommand
 from flask_script import Manager
 
-get_config_mode = environ.get("MEASUREDSTUDIOS_CONFIG_MODE", "Debug")
+get_config_mode = environ.get("NBAAPI_CONFIG_MODE", "Debug")
 
 # try:
 #     config_mode = config_dict[get_config_mode.capitalize()]
 # except KeyError:
-#     exit('Error: Invalid MEASUREDSTUDIOS_CONFIG_MODE environment variable entry.')
+#     exit('Error: Invalid NBAAPI_CONFIG_MODE environment variable entry.')
 
 from app import create_app
 from app.commands import InitDbCommand
