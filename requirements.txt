@@ -33,7 +33,7 @@ Flask-BabelEx
 Flask-User
 Flask-Session
 email_validator
-Flask-WTF==0.14.3
+Flask-WTF==0.15.0
 gunicorn
 psycopg2
 # Automated tests
